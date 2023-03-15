@@ -1,0 +1,7 @@
+ [
+    { "number": 2, "name": "Jollof Rice", "price": 2000 },
+    { "number": 3, "name": "White Rice", "price": 2000 },
+    { "number": 4, "name": "Moi Moi", "price": 2000 },
+    { "number": 5, "name": "Water", "price": 2000 }
+  ]
+  
