@@ -36,7 +36,7 @@ const io = new Server(httpServer, {
 
 // session middleware
 const sessionMiddleware = session({
-  secret: "keyboard cat",
+  secret: CONFIG.SECRET_KEY,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false, maxAge: 13149000000 },
