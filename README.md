@@ -1,6 +1,7 @@
-# Restaurant Chat Bot With Chat History
+# Restaurant Chat Bot
 
-This is a chatbot for a restaurant that allows users to place an order, cancel order, check their order history(current or old), and saves their session and chat history. The chatbot is built using Node.js and Socket.IO, and is designed to provide a seamless and convenient experience for customers who want to order food without having to visit the restaurant or make a phone call (NOT PRODUCTION READY).
+This is a simple restaurant chatbot that will assist customers in placing orders for their preferred meals.
+
 
 ### Application link
 
@@ -16,8 +17,6 @@ This is a chatbot for a restaurant that allows users to place an order, cancel o
 -   They can place an order by selecting the corresponding number of the food item from the menu. 
 -   If they want to cancel their current order, they can enter 0, and the order cart will be cleared. 
 -   Users can also check their current or old order history by entering the appropriate number. 
-
-
 
 
 ### Getting Started
@@ -36,6 +35,7 @@ This is a chatbot for a restaurant that allows users to place an order, cancel o
     - `npm run start`
 5. Open the application in your browser:
     - `http://localhost:5000`
+
 
 ### Usage
 
