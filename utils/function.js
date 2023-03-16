@@ -5,9 +5,9 @@ const fs = require("fs");
 
 // function to check text input 
 const isAllowedText = (text) => {
-    const allowedText = [0, 1, 2, 3, 4, 5, 6, 7, 97, 98, 99];
+    const allowedText = [0, 1, 2, 3, 4, 5, 6, 7, 96, 97, 98, 99];
     const allow = allowedText.find((t) => text.toString() === t.toString());
-    // console.log("allowed text",typeof(allow));
+    
     return allow !== undefined ? allow.toString() : false;
 };  
 
@@ -32,6 +32,13 @@ const switchChatMessage = async (text, userId) => {
       "utf-8"
     );
     const menu = JSON.parse(menuJSON);
+
+    // parse options.json
+    const optionsJSON = fs.readFileSync(
+      path.join(__dirname, "../data", "options.json"),
+      "utf-8"
+    );
+    const options = JSON.parse(optionsJSON);
   
     // retrieve user info from DB
     const UserDetails = await User.findOne({userId});
@@ -47,12 +54,12 @@ const switchChatMessage = async (text, userId) => {
           UserDetails.currentOrder = [];
           await UserDetails.save();
   
-          return "Order cancelled";
+          return "Order cancelled" + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
         }
   
       case "1":
         const formattedMenu = menu.map((item) => `${item.number}. ${item.name}: ₦${item.price}`).join("<br>");
-        return `Here's the menu: <br> ${formattedMenu}`;
+        return `Here's the menu: <br> ${formattedMenu}` + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu for more options";
   
       case "2":
         var result = menu.find(item => item.number === 2);
@@ -64,7 +71,7 @@ const switchChatMessage = async (text, userId) => {
         UserDetails.currentOrder = [...UserDetails.currentOrder, {price, name}]
         await UserDetails.save();
         
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price} `;
+        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to see order <br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
   
       case "3":
         var result = menu.find(item => item.number === 3);
@@ -76,7 +83,7 @@ const switchChatMessage = async (text, userId) => {
         UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price2, name:name2}];
         await UserDetails.save();
         
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${price2}`;
+        return `You selected <br>----<br>${result.name}<br> Price: ₦${price2}` + "<br>----<br>- press 99 to see order <br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
   
       case "4":
         var result = menu.find(item => item.number === 4);
@@ -88,7 +95,7 @@ const switchChatMessage = async (text, userId) => {
         UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price3, name:name3}]
         await UserDetails.save();
   
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price} `;
+        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to see order <br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
   
       case "5":
         var result = menu.find(item => item.number === 5);
@@ -100,7 +107,7 @@ const switchChatMessage = async (text, userId) => {
         UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price4, name:name4}]
         await UserDetails.save();
         
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price} `;
+        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to see order <br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
       
       case "6":
         var result = menu.find(item => item.number === 6);
@@ -112,7 +119,7 @@ const switchChatMessage = async (text, userId) => {
         UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price5, name:name5}]
         await UserDetails.save();
         
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price} `;
+        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to see order <br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
       
       case "7":
         var result = menu.find(item => item.number === 7);
@@ -124,30 +131,40 @@ const switchChatMessage = async (text, userId) => {
         UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price6, name:name6}]
         await UserDetails.save();
         
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price} `;
-  
+        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to see order <br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
+      
+      case "96":
+        const formattedOptions = options
+        .map((options) => `<ul><li>${options}</li></ul>`)
+        .join("");
+        return `${formattedOptions}`;
+
+      // view current order
       case "97":
         if (UserDetails.currentOrder.length < 1){
-          return "You do not have any orders"
+          return "You do not have any orders" + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
         } else if (UserDetails.currentOrder.length > 1){
           let currentOrder = UserDetails.currentOrder.map((item) => `${item.name} for ₦${item.price}`).join("<br>")
   
           let totalPrice = UserDetails.currentOrder.reduce((acc, item) => acc + item.price, 0)
-          return `Current order <br>----<br>${currentOrder}<br>----<br>Total price: ₦${totalPrice}`
+          return `Current order <br>----<br>${currentOrder}<br>----<br>Total price: ₦${totalPrice}` + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
         } else {
           let currentOrder = `${UserDetails.currentOrder[0].name} for ₦${UserDetails.currentOrder[0].price}`
-          return `Current order <br>----<br>${currentOrder}`
+          return `Current order <br>----<br>${currentOrder}` + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
         }
   
+      // view order hsitory
       case "98":
         if (UserDetails.orderHistory.length < 1){
           return "You have no order history"
         } else {
-          orderHistory = "Your order history <br>----<br>" + UserDetails.orderHistory.map((item) => `${item.name} for ₦${item.price}`).join("<br>")
+          orderHistory = "Your order history <br>----<br>" 
+          + UserDetails.orderHistory.map((item) => `${item.name} for ₦${item.price}`).join("<br>") + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
         }
   
         return orderHistory
-        
+      
+      // place order
       case "99":
         if (UserDetails.currentOrder.length < 1){
           return 'You have not ordered yet'
@@ -157,7 +174,7 @@ const switchChatMessage = async (text, userId) => {
           UserDetails.save()
         }
         
-        return 'Your order has been placed.'
+        return 'Your order has been placed.' + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu for other options";
     }
 };
   
