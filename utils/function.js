@@ -157,7 +157,7 @@ const switchChatMessage = async (text, userId) => {
           UserDetails.save()
         }
         
-        return 'Your order has been placed'
+        return 'Your order has been placed.'
     }
 };
   
