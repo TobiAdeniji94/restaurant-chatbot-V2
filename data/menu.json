@@ -1,7 +1,9 @@
  [
-    { "number": 2, "name": "Jollof Rice", "price": 2000 },
-    { "number": 3, "name": "White Rice", "price": 2000 },
-    { "number": 4, "name": "Moi Moi", "price": 2000 },
-    { "number": 5, "name": "Water", "price": 2000 }
+    { "number": 2, "name": "Rice & Turkey", "price": 2700 },
+    { "number": 3, "name": "Chicken & chips", "price": 2700 },
+    { "number": 4, "name": "Rice & Gizzard", "price": 1700 },
+    { "number": 5, "name": "Beef Burger", "price": 5000 },
+    { "number": 6, "name": "Shawarma", "price": 1500 },
+    { "number": 7, "name": "Water", "price": 500 }
   ]
   
