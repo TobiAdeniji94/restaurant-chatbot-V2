@@ -83,7 +83,7 @@ const switchChatMessage = async (text, userId) => {
         UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price2, name:name2}];
         await UserDetails.save();
         
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price2}` + "<br>----<br>- press 99 to order <br>- press 96 to see main menu <br>- press 1 to see food menu";
+        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to order <br>- press 96 to see main menu <br>- press 1 to see food menu";
   
       case "4":
         var result = menu.find(item => item.number === 4);
