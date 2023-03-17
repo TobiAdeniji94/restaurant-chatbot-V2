@@ -1,6 +1,6 @@
 # Restaurant Chat Bot
 
-This is a simple restaurant chatbot that will assist customers in placing orders for their preferred meals.
+This is a simple restaurant chatbot that will assist customers in placing orders for their preferred meals built with NodeJS, Express and Socket.io
 
 
 ### Application link
@@ -14,8 +14,8 @@ This is a simple restaurant chatbot that will assist customers in placing orders
 
 ---
 #### The restaurant chatbot offers various features that allow users to interact with the system in different ways: 
--   They can place an order by selecting the corresponding number of the food item from the menu. 
--   If they want to cancel their current order, they can enter 0, and the order cart will be cleared. 
+-   Users can place an order by selecting the corresponding number of the food item from the menu. 
+-   If users want to cancel their current order, they can enter 0, and the order cart will be cleared. 
 -   Users can also check their current or old order history by entering the appropriate number. 
 
 
@@ -46,8 +46,9 @@ To use the restaurant chatbot, follow these steps:
 -   Click the application link [tobi-restaurant-bot](https://tobi-restaurant-bot.onrender.com/) on your device
 
 -   A menu will appear with these options:
-    - Type 1 to Place an order: When you type in 1, the chatbot will present you with a menu of items with corresponding numbers. Enter the number of the item you want to order.
-    - Type 99 to checkout order: When you type in 99, the chatbot will let you know that your order has been placed.
-    - Type 98 to see order history: When you type in 98, the chatbot will show your old orders.
-    - Type 97 to see current order: When you type in 97, the chatbot will show your current order.
-    - Type 0 to cancel order: When you type in 0, the chatbot will let you know that your order has been cancelled and will show the main menu.
+    - Input 1 to Place an order: When you type in 1, the chatbot will present you with a menu of items with corresponding numbers. Enter the number of the item you want to order.
+    - Input 99 to checkout order: When you type in 99, the chatbot will let you know that your order has been placed.
+    - Input 98 to see order history: When you type in 98, the chatbot will show your old orders.
+    - Input 97 to see current order: When you type in 97, the chatbot will show your current order.
+    - Input 0 to cancel order: When you type in 0, the chatbot will let you know that your order has been cancelled and will show the main menu.
+
