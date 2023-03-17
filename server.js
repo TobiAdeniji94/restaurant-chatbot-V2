@@ -64,7 +64,8 @@ io.on("connection", async (socket) => {
   );
   const options = JSON.parse(optionsJSON);
 
-  const welcome = "Hello, How may I help you?";
+  const welcome = "Hello, how may I help you?";
+
   let user;
 
   // sets up user session for chat application
