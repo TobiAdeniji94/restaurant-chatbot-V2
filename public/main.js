@@ -11,11 +11,7 @@ socket.on("connect", () => {
 });
 
 socket.on("user message", (message) => {
-	
 	renderMessage("You", message);
-
-	// Scroll down
-	chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
 
@@ -41,11 +37,11 @@ function renderMessage(message, isBotMessage) {
   chatBubble.innerHTML = message;
   chatContainer.appendChild(chatBubble);
 
-  // scroll down
+  // scrolling to latest message
   chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-
+// output options to DOM
 socket.on("options", (options) => {
   const optionsHtml = options
     .map((options) => `<ul><li>${options}</li></ul>`)
@@ -53,10 +49,14 @@ socket.on("options", (options) => {
   renderMessage(optionsHtml, true);
 });
 
+// output welcome message to DOM
+socket.on("welcome", (welcome) =>{
+  const welcomeHTML = welcome;
+  renderMessage(welcomeHTML, true);
+})
 
-// output message to DOM
+// output user message to DOM
 socket.on("chat", (chat) => {
-  console.log("chat", chat);
 
   const messageHtml = `<p>${chat}</p>`;
 

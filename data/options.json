@@ -1,8 +1,8 @@
 [
-    "Type 1 to Place an order",
-    "Type 99 to checkout order",
-    "Type 98 to see order history",
-    "Type 97 to see current order",
-    "Type 0 to cancel order"
+    "Input 1 to Place an order",
+    "Input 99 to checkout order",
+    "Input 98 to see order history",
+    "Input 97 to see current order",
+    "Input 0 to cancel order"
   ]
   

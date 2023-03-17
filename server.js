@@ -64,7 +64,7 @@ io.on("connection", async (socket) => {
   );
   const options = JSON.parse(optionsJSON);
 
-
+  const welcome = "Hello, How may I help you?";
   let user;
 
   // sets up user session for chat application
@@ -85,6 +85,8 @@ io.on("connection", async (socket) => {
     user = await User.findOne({ userId: userId });
   }
 
+  socket.emit("welcome", welcome);
+  
   // sends options
   socket.emit("options", options);
 
