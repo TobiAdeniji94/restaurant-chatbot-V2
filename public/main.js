@@ -2,8 +2,8 @@ import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 
 const socket = io();
 
-const chatContainer = document.getElementById("chat__container");
-const chatInput = document.getElementById("chat__input");
+const chatContainer = document.getElementById("chat-container");
+const chatInput = document.getElementById("chat-input");
 const chat = document.getElementById("chat");
 
 socket.on("connect", () => {
@@ -31,7 +31,7 @@ chatInput.addEventListener("submit", function (e) {
 // output message to DOM
 function renderMessage(message, isBotMessage) {
   const chatBubble = document.createElement("div");
-  chatBubble.className = `chat__bubble chat__bubble--${
+  chatBubble.className = `chat-bubble chat-bubble--${
     isBotMessage ? "bot" : "user"
   }`;
   chatBubble.innerHTML = message;
