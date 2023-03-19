@@ -28,7 +28,7 @@ main{
   width: 370px;
 }
   
-.chat-main .chat-banner{
+main .chat-banner{
   background: rgba(255, 255, 255, 0.2);
   color: white;
   line-height: 1.5;
@@ -37,7 +37,7 @@ main{
   font-size: 20px;
 }
 
-.chat-main .chat-container{
+main .chat-container{
   background: rgba(255, 255, 255, 0.2);
   padding: 10px 15px;
   min-height: 400px;
@@ -59,16 +59,17 @@ main{
   align-self: flex-start;
   color: white;
   border-radius: 0 1rem 1rem 1rem;
+  margin-right: auto;
 }
 .chat-bubble--user {
   background: #bc92b8;
   color: white;
   align-self: flex-end;
   border-radius: 1rem 1rem 0 1rem;
-  
+  margin-left: auto;
 } 
 
-.chat-main .chat-input {
+main .chat-input {
   width: 100%;
   border-radius: 0 0 5px 5px;
   background: rgba(255, 255, 255, 0.19);
@@ -79,12 +80,12 @@ main{
   padding: 10px;
 }
 
-.chat-main .chat-input{
+main .chat-input{
   width: 100%;
   position: relative;
 }
 
-.chat-main .chat-input input{
+main .chat-input input{
   background: rgba(255, 255, 255, 0.2);
   width: 100%;
   padding: 10px;
@@ -96,11 +97,11 @@ main{
   transition: 0.3s all ease;
 }
 
-.chat-main .chat-input input:focus{
+main .chat-input input:focus{
   border-color: #af7baa;
 }
 
-.chat-main .chat-input button {
+main .chat-input button {
   position: absolute;
   top: 50%;
   right: 10px;
@@ -120,12 +121,12 @@ main{
   transition: 0.3s all ease;
 }
 
-.chat-main .chat-input button:hover {
+main .chat-input button:hover {
   background: #a43d8c;
   color: white;
 }
 
-.chat-main .chat-input input:valid ~ button {
+main .chat-input input:valid ~ button {
   opacity: 1;
   pointer-events: auto;
 }

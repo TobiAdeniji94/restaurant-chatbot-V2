@@ -31,15 +31,17 @@ chatInput.addEventListener("submit", function (e) {
 // output message to DOM
 function renderMessage(message, isBotMessage) {
   const chatBubble = document.createElement("div");
-  chatBubble.className = `chat-bubble chat-bubble--${
-    isBotMessage ? "bot" : "user"
-  }`;
+  chatBubble.className = `chat-bubble chat-bubble--${isBotMessage ? "bot" : "user"}`;
   chatBubble.innerHTML = message;
-  chatContainer.appendChild(chatBubble);
-
-  // scrolling to latest message
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  if(chatContainer){
+    chatContainer.appendChild(chatBubble);
+    // scrolling to latest message
+    if (chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight) {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }
 }
+
 
 // output options to DOM
 socket.on("options", (options) => {
@@ -56,9 +58,8 @@ socket.on("welcome", (welcome) =>{
 })
 
 // output user message to DOM
-socket.on("chat", (chat) => {
-
-  const messageHtml = `<p>${chat}</p>`;
-
+socket.on("chat", (message) => {
+  const messageHtml = `<p>${message}</p>`;
   renderMessage(messageHtml, true);
 });
+
