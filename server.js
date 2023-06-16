@@ -6,7 +6,6 @@ const session = require("express-session");
 const { v4: uuidv4 } = require("uuid");
 const { Server } = require("socket.io");
 const path = require("path");
-
 const app = require("./app");
 const User = require("./models/userModel");
 const handleMessage = require("./utils/function");
