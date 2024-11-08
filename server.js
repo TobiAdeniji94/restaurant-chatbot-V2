@@ -16,7 +16,7 @@ mongoose
   .connect(CONFIG.MONGODB_URL)
   .then(() => {
     console.log("Connection to mongoDB successfully");
-    httpServer.listen(CONFIG.PORT, "localhost", () => {
+    httpServer.listen(CONFIG.PORT, "0.0.0.0", () => {
       console.log("Server running...", CONFIG.PORT);
     });
   })
