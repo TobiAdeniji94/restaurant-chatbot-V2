@@ -17,14 +17,19 @@ socket.on("user message", (message) => {
 chatInput.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  // Get message text
+  // get message text
   const chatMsg = e.target.elements.chat.value;
+
+  // don't send empty messages
+  if (chatMsg === "") {
+    return;
+  }
 
   // emit message to server
   socket.emit('chatMessage', chatMsg)
 
   chat.value = "";
-  renderMessage(chatMsg, false);
+  renderMessage(chatMsg, false); // render user message
 });
 
 // output message to DOM
@@ -32,7 +37,7 @@ function renderMessage(message, isBotMessage) {
   const chatBubble = document.createElement("div");
   chatBubble.className = `chat-bubble chat-bubble--${isBotMessage ? "bot" : "user"}`;
   chatBubble.innerHTML = message;
-  if(chatContainer){
+  if (chatContainer) {
     chatContainer.appendChild(chatBubble);
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
@@ -42,7 +47,7 @@ function renderMessage(message, isBotMessage) {
 // output options to DOM
 socket.on("options", (options) => {
   const optionsHtml = options
-    .map((options) => `<ul><li>${options}</li></ul>`)
+    .map((option) => `<ul><li>${option}</li></ul>`)
     .join("");
   renderMessage(optionsHtml, true);
 });

@@ -2,180 +2,174 @@ const path = require("path");
 const User = require("../models/userModel");
 const fs = require("fs");
 
+// Caching menu and options to avoid reading from the file system repeatedly
+let menu = [];
+let options = [];
 
-// function to check text input 
+// function to load menu and options data from files (called only once)
+const loadData = () => {
+  try {
+    const menuJSON = fs.readFileSync(path.join(__dirname, "../data", "menu.json"), "utf-8");
+    const optionsJSON = fs.readFileSync(path.join(__dirname, "../data", "options.json"), "utf-8");
+    menu = JSON.parse(menuJSON);
+    options = JSON.parse(optionsJSON);
+  } catch (err) {
+    console.error("Error reading menu or options file:", err);
+  }
+};
+
+// Call loadData once at the start of the application
+loadData();
+
+// Function to check allowed text
 const isAllowedText = (text) => {
-    const allowedText = [0, 1, 2, 3, 4, 5, 6, 7, 96, 97, 98, 99];
-    const allow = allowedText.find((t) => text.toString() === t.toString());
-    
-    return allow !== undefined ? allow.toString() : false;
-};  
+  const allowedText = [0, 1, 2, 3, 4, 5, 6, 7, 96, 97, 98, 99];
+  return allowedText.includes(Number(text)) ? text : false;
+};
 
-// function to check allowed text
+// Function to handle user messages
 const handleMessage = async (text, socket, userId) => {
+  // Check if the message is allowed
+  if (!isAllowedText(text)) {
+    const formattedOptions = options.map(option => `<ul><li>${option}</li></ul>`).join("");
+    return socket.emit("chat", `Please select the given options <br>----<br>${formattedOptions}`);
+  }
 
-    // Check if the message is allowed
-    if (!isAllowedText(text))
-      return socket.emit("chat", "Please select the given options");
-  
-    // handle chats that reach here.
-    // emit reply as reply
-    const reply = await switchChatMessage(text, userId);
-    socket.emit("chat", reply);
+  // Handle valid messages
+  const reply = await switchChatMessage(text, userId);
+  socket.emit("chat", reply);
 };
 
-// function to return message in response to user action 
+// Function to process chat messages based on user input
 const switchChatMessage = async (text, userId) => {
-    // parse menu.json
-    const menuJSON = fs.readFileSync(
-      path.join(__dirname, "../data", "menu.json"),
-      "utf-8"
-    );
-    const menu = JSON.parse(menuJSON);
+  // Retrieve user info from DB
+  const UserDetails = await User.findOne({ userId });
+  if (!UserDetails) {
+    return "User not found";
+  }
 
-    // parse options.json
-    const optionsJSON = fs.readFileSync(
-      path.join(__dirname, "../data", "options.json"),
-      "utf-8"
-    );
-    const options = JSON.parse(optionsJSON);
-  
-    // retrieve user info from DB
-    const UserDetails = await User.findOne({userId});
-    if (!UserDetails) {
-        return "User not found";
-    } 
-    
-    switch (text) {
-      case "0":
-        if (UserDetails.currentOrder.length < 1){
-          return "You do not have any order"
-        } else {
-          UserDetails.currentOrder = [];
-          await UserDetails.save();
-  
-          return "Order cancelled" + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu";
-        }
-  
-      case "1":
-        const formattedMenu = menu.map((item) => `${item.number}. ${item.name}: ₦${item.price}`).join("<br>");
-        return `Here's the menu: <br>----<br> ${formattedMenu}` + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu";
-  
-      case "2":
-        var result = menu.find(item => item.number === 2);
-        if (!result) {
-          return "Sorry, the item you selected is not available";
-        }
-        
-        let {price, name} = result;
-        UserDetails.currentOrder = [...UserDetails.currentOrder, {price, name}]
-        await UserDetails.save();
-        
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to order <br>- press 96 to see main menu <br>- press 1 to see food menu";
-  
-      case "3":
-        var result = menu.find(item => item.number === 3);
-        if (!result) {
-          return "Sorry, the item you selected is not available";
-        }
-  
-        let {price:price2, name:name2} = result;
-        UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price2, name:name2}];
-        await UserDetails.save();
-        
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to order <br>- press 96 to see main menu <br>- press 1 to see food menu";
-  
-      case "4":
-        var result = menu.find(item => item.number === 4);
-        if (!result) {
-          return "Sorry, the item you selected is not available";
-        }
-  
-        let {price:price3, name:name3} = result;
-        UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price3, name:name3}]
-        await UserDetails.save();
-  
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to order <br>- press 96 to see main menu <br>- press 1 to see food menu";
-  
-      case "5":
-        var result = menu.find(item => item.number === 5);
-        if (!result) {
-          return "Sorry, the item you selected is not available";
-        }
-  
-        let {price:price4, name:name4} = result;
-        UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price4, name:name4}]
-        await UserDetails.save();
-        
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to order <br>- press 96 to see main menu <br>- press 1 to see food menu";
-      
-      case "6":
-        var result = menu.find(item => item.number === 6);
-        if (!result) {
-          return "Sorry, the item you selected is not available";
-        }
-  
-        let {price:price5, name:name5} = result;
-        UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price5, name:name5}]
-        await UserDetails.save();
-        
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to order <br>- press 96 to see main menu <br>- press 1 to see food menu";
-      
-      case "7":
-        var result = menu.find(item => item.number === 7);
-        if (!result) {
-          return "Sorry, the item you selected is not available";
-        }
-  
-        let {price:price6, name:name6} = result;
-        UserDetails.currentOrder = [...UserDetails.currentOrder, {price:price6, name:name6}]
-        await UserDetails.save();
-        
-        return `You selected <br>----<br>${result.name}<br> Price: ₦${result.price}` + "<br>----<br>- press 99 to order <br>- press 96 to see main menu <br>- press 1 to see food menu";
-      
-      case "96":
-        const formattedOptions = options
-        .map((options) => `<ul><li>${options}</li></ul>`)
-        .join("");
-        return `${formattedOptions}`;
+  let result;
+  let response = "";
 
-      // view current order
-      case "97":
-        if (UserDetails.currentOrder.length < 1){
-          return "You do not have any orders" + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu";
-        } else if (UserDetails.currentOrder.length > 1){
-          let currentOrder = UserDetails.currentOrder.map((item) => `${item.name} for ₦${item.price}`).join("<br>")
-  
-          let totalPrice = UserDetails.currentOrder.reduce((acc, item) => acc + item.price, 0)
-          return `Current order <br>----<br>${currentOrder}<br>----<br>Total price: ₦${totalPrice}` + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu";
-        } else {
-          let currentOrder = `${UserDetails.currentOrder[0].name} for ₦${UserDetails.currentOrder[0].price}`
-          return `Current order <br>----<br>${currentOrder}` + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu";
-        }
-  
-      // view order hsitory
-      case "98":
-        if (UserDetails.orderHistory.length < 1){
-          return "You have no order history"
-        } else {
-          orderHistory = "Your order history <br>----<br>" 
-          + UserDetails.orderHistory.map((item) => `${item.name} for ₦${item.price}`).join("<br>") + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu";
-        }
-  
-        return orderHistory
-      
-      // place order
-      case "99":
-        if (UserDetails.currentOrder.length < 1){
-          return 'You have not ordered yet'
-        } else {
-          UserDetails.orderHistory = [...UserDetails.orderHistory, ...UserDetails.currentOrder]
-          UserDetails.currentOrder = [...UserDetails.currentOrder]
-          UserDetails.save()
-        }
-        
-        return 'Your order has been placed.' + "<br>----<br>- press 96 to see main menu <br>- press 1 to see food menu";
-    }
+  switch (text) {
+    case "0":
+      // Cancel current order if exists
+      if (UserDetails.currentOrder.length < 1) {
+        return "You do not have any order";
+      } else {
+        UserDetails.currentOrder = [];
+        await UserDetails.save();
+        response = `Order cancelled
+          <br>----<br>
+          <ul><li>enter 96 to see main menu</li></ul><br>
+          <ul><li>enter 1 to see food menu</li></ul>`;
+      }
+      break;
+
+    case "1":
+      // Show the food menu
+      const formattedMenu = menu.map(item => `${item.number}. ${item.name}: ₦${item.price}`).join("<br>");
+      response = `Here's the menu: <br>----<br> ${formattedMenu}
+        <br>----<br>
+        <ul><li>enter 1 to see food menu</li></ul><br>
+        <ul><li>enter 97 to see current order</li></ul><br>
+        <ul><li>enter 98 to see order history</li></ul><br>
+        <ul><li>enter 99 to checkout order</li></ul><br>
+        <ul><li>enter 0 to cancel order</li></ul>`;
+      break;
+
+    case "96":
+      // Show the main menu options
+      const formattedOptions = options.map(option => `<ul><li>${option}</li></ul>`).join("");
+      response = `${formattedOptions}`;
+      break;
+
+    case "97":
+      // View current order
+      if (UserDetails.currentOrder.length < 1) {
+        return `You do not have any orders 
+          <br>----<br>
+          <ul><li>enter 96 to see main menu</li></ul><br>
+          <ul><li>enter 1 to see food menu</li></ul>`;
+      } else {
+        let currentOrder = UserDetails.currentOrder.map(item => `${item.name} for ₦${item.price}`).join("<br>");
+        let totalPrice = UserDetails.currentOrder.reduce((acc, item) => acc + item.price, 0);
+        response = `Current order <br>----<br>
+        ${currentOrder}
+        <br>----<br>
+        Total price: ₦${totalPrice}
+        <br>----<br>
+        <ul><li>enter 1 to see food menu</li></ul><br>
+        <ul><li>enter 98 to see order history</li></ul><br>
+        <ul><li>enter 99 to checkout order</li></ul><br>
+        <ul><li>enter 0 to cancel order</li></ul>`;
+      }
+      break;
+
+    case "98":
+      // View order history
+      if (UserDetails.orderHistory.length < 1) {
+        return "You have no order history";
+      } else {
+        const orderHistory = "Your order history <br>----<br>" + 
+          UserDetails.orderHistory.map(item => `- ${item.name} for ₦${item.price}`).join("<br>") + 
+          `<br>----<br>
+          <ul><li>enter 1 to see food menu</li></ul><br>
+          <ul><li>enter 96 to see main menu</li></ul>`;
+        response = orderHistory;
+      }
+      break;
+
+    case "99":
+      // Place the order
+      if (UserDetails.currentOrder.length < 1) {
+        return `You have not ordered yet
+          <br>----<br>
+          <ul><li>enter 96 to see main menu</li></ul><br>
+          <ul><li>enter 1 to see food menu</li></ul>`;
+      } else {
+        UserDetails.orderHistory = [...UserDetails.orderHistory, ...UserDetails.currentOrder];
+        UserDetails.currentOrder = [];
+        await UserDetails.save();
+        response = `Your order has been placed. 
+          <br>----<br>
+          <ul><li>enter 1 to see food menu</li></ul><br>
+          <ul><li>enter 96 to see main menu</li></ul><br>
+          <ul><li>enter 97 to see current order</li></ul><br>
+          <ul><li>enter 98 to see order history</li></ul>`;
+      }
+      break;
+
+    // Handle food item selection (2-7)
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+      result = menu.find(item => item.number === Number(text));
+      if (!result) {
+        response = "Sorry, the item you selected is not available";
+      } else {
+        const { price, name } = result;
+        UserDetails.currentOrder.push({ price, name });
+        await UserDetails.save();
+        response = `You selected <br>----<br>${name}<br> Price: ₦${price}
+        <br>----<br>
+        <ul><li>enter 1 to see food menu</li></ul><br>
+        <ul><li>enter 97 to see current order</li></ul><br>
+        <ul><li>enter 98 to see order history</li></ul><br>
+        <ul><li>enter 99 to checkout order</li></ul><br>
+        <ul><li>enter 0 to cancel order</li></ul>`;
+      }
+      break;
+
+    default:
+      response = "Invalid input.";
+  }
+
+  return response;
 };
-  
+
+// Export the handleMessage function
 module.exports = handleMessage;

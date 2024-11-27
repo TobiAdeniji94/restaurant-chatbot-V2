@@ -39,10 +39,20 @@ main .chat-banner{
 
 main .chat-container{
   background: rgba(255, 255, 255, 0.2);
-  padding: 10px 15px;
-  min-height: 400px;
-  max-height: 400px;
+  padding: 10px;
+  max-height: 500px;
   overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .chat-bubble {
@@ -50,6 +60,7 @@ main .chat-container{
   margin-block: 1rem;
   font-size: 0.8rem;
   padding: 1rem;
+  animation: fadeIn 0.5s ease-in-out;
 }
 .chat-bubble > ul {
   list-style-position: inside;
@@ -145,4 +156,29 @@ main .chat-input input:valid ~ button {
 
 .github-repo a:hover {
   color: #ccc;
+}
+
+@media (max-width: 600px) {
+  main {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .chat-container {
+    min-height: 300px;
+    max-height: 300px;
+  }
+
+  .chat-bubble {
+    font-size: 0.9rem;
+    max-width: 80%;
+  }
+
+  .chat-input input {
+    font-size: 1rem;
+  }
+
+  .chat-input button {
+    padding: 5px 8px;
+  }
 }

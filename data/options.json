@@ -1,8 +1,7 @@
 [
-    "Input 1 to Place an order",
-    "Input 99 to checkout order",
-    "Input 98 to see order history",
-    "Input 97 to see current order",
-    "Input 0 to cancel order"
-  ]
-  
+  "Enter 1 to Place an order from food menu",
+  "Enter 97 to see current order",
+  "Enter 98 to see order history",
+  "Enter 99 to checkout order",
+  "Enter 0 to cancel order"
+]

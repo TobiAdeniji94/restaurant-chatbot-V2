@@ -9,9 +9,9 @@ const path = require("path");
 const app = require("./app");
 const User = require("./models/userModel");
 const handleMessage = require("./utils/function");
-const CONFIG = require('./config/config')
+const CONFIG = require('./config/config');
 
-// connection to mongoDB
+// Connection to MongoDB
 mongoose
   .connect(CONFIG.MONGODB_URL)
   .then(() => {
@@ -33,7 +33,20 @@ const io = new Server(httpServer, {
   },
 });
 
-// session middleware
+// Caching options data
+let options = [];
+const loadOptions = () => {
+  try {
+    const optionsJSON = fs.readFileSync(path.join(__dirname, "data", "options.json"), "utf-8");
+    options = JSON.parse(optionsJSON);
+  } catch (err) {
+    console.error("Error reading options file:", err);
+  }
+};
+
+loadOptions();
+
+// Session middleware
 const sessionMiddleware = session({
   secret: CONFIG.SECRET_KEY,
   resave: false,
@@ -45,54 +58,54 @@ const sessionMiddleware = session({
   }),
 });
 
-
 app.use(sessionMiddleware);
 
 io.use((socket, next) => {
   sessionMiddleware(socket.request, {}, next);
 });
 
-
-// runs when client connects
+// When a client connects
 io.on("connection", async (socket) => {
-
-  // parse options.json
-  const optionsJSON = fs.readFileSync(
-    path.join(__dirname, "data", "options.json"),
-    "utf-8"
-  );
-  const options = JSON.parse(optionsJSON);
-
   const welcome = "Hello, how may I help you?";
-
   let user;
 
-  // sets up user session for chat application
   const session = socket.request.session;
   let userId = session.userId;
+
   if (!userId) {
     userId = uuidv4();
     session.userId = userId;
-    session.save((error) => {
-      if (error) {
-        console.log(error);
-      }
+    await new Promise((resolve, reject) => {
+      session.save((error) => {
+        if (error) reject(error);
+        resolve();
+      });
     });
     user = await User.create({ userId: userId });
-    // console.log("New user, 🎯");
   } else {
-    // console.log("Welcome back, 🍿");
     user = await User.findOne({ userId: userId });
-  }
+  };
 
   socket.emit("welcome", welcome);
   
-  // sends options
-  socket.emit("options", options);
+  if (!session.optionsShown) {
+    socket.emit("options", options);
+    session.optionsShown = true;
+    await new Promise((resolve, reject) => {
+      session.save((error) => {
+        if (error) reject(error);
+        resolve();
+      });
+    });
+  }
 
-
-  // listen for chat message
+  // Listen for chat messages
   socket.on("chatMessage", async (chatMsg) => {
-    await handleMessage(chatMsg, socket, userId);
+    try {
+      await handleMessage(chatMsg, socket, userId);
+    } catch (error) {
+      console.error("Error handling chat message:", error);
+      socket.emit("error", "Something went wrong, please try again.");
+    };
   });
 });
